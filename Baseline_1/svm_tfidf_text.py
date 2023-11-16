@@ -120,19 +120,21 @@ def preprocess_text(X):
 def remove_non_frequent_words(X):
     all_text = []
 
+    # create dict of words with count of each word
     for i in range(0, len(X)):
         t = X[i]
         splitted = t[0].split(" ")
-        # create dict of words with count of each word
         dict_words = {}
         for word in splitted:
             if word not in dict_words:
                 dict_words[word] = 1
             else:
                 dict_words[word] = dict_words[word] + 1
-        
+
+    # remove infrequent and very frequent words
+    for i in range(0, len(X)):    
         for word in dict_words.keys():
-            if dict_words[word] == 1: # remove words that occur less than one time
+            if dict_words[word] == 1 or dict_words[word] >= 108:
                 t[0].replace(word, '')
 
         X[i] = t
