@@ -86,7 +86,7 @@ def get_data(my_seed=42):
 
     X = preprocess_text(X)
 
-    processed_text = remove_non_frequent_words(X)
+    processed_text = apply_word_pruning(X)
 
     train_text, test_text, train_labels, test_labels = train_test_split(processed_text, y, test_size=0.2, random_state=my_seed)
     vocab = flatten_words(processed_text, get_unique=True)
@@ -117,14 +117,14 @@ def preprocess_text(X):
         X[i] = [stemmed_text]
     return X
 
-def remove_non_frequent_words(X):
+def apply_word_pruning(X):
     all_text = []
+    dict_words = {}
 
     # create dict of words with count of each word
     for i in range(0, len(X)):
         t = X[i]
         splitted = t[0].split(" ")
-        dict_words = {}
         for word in splitted:
             if word not in dict_words:
                 dict_words[word] = 1
@@ -132,7 +132,8 @@ def remove_non_frequent_words(X):
                 dict_words[word] = dict_words[word] + 1
 
     # remove infrequent and very frequent words
-    for i in range(0, len(X)):    
+    for i in range(0, len(X)):  
+        t = X[i]  
         for word in dict_words.keys():
             if dict_words[word] == 1 or dict_words[word] >= 108:
                 t[0].replace(word, '')
